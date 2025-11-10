@@ -17,8 +17,10 @@ int main() {
     std::cin >> origem;
 
     g.simularMensagens(origem);
+    g.descobrirTopologia(origem);
+    g.gerarTabelasDeRoteamento();
 
     std::system("dot -Tpng output/grafo.dot -o output/grafo.png");
-    std::cout << "\n✅ Grafo salvo em 'output/grafo.png'\n";
+    std::cout << "\n Grafo salvo em 'output/grafo.png'\n";
     return 0;
 }

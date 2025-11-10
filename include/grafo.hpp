@@ -10,9 +10,11 @@ public:
     void salvarDot(const std::string& filename) const;
     void dijkstra(int origem, std::vector<int>& dist, std::vector<int>& prev) const;
     void simularMensagens(int origem) const;
+    void descobrirTopologia(int origem) const;
+    void gerarTabelasDeRoteamento() const;
 
 private:
     int n;
-    std::vector<std::vector<int>> adj; // lista de adjacência com pesos (peso=1)
+    std::vector<std::vector<int>> adj;
     void garantirConexao();
 };
