@@ -201,5 +201,3 @@ Para encontrar os caminhos mais curtos:
 ## 📄 Licença
 
 Projeto educacional livre para uso e modificação.
-
-## 👥 Contribuições

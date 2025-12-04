@@ -1,20 +1,37 @@
+# Compilador e flags
 CXX = g++
 CXXFLAGS = -Wall -std=c++17 -Iinclude
-SRC = src/main.cpp src/grafo.cpp
-OBJ = $(SRC:.cpp=.o)
-BUILD = build
-OUTPUT = output
 
-all: dot
+# Diretórios
+SRC_DIR = src
+BUILD_DIR = build
+OUTPUT_DIR = output
 
-$(BUILD)/%.o: src/%.cpp
-	mkdir -p $(BUILD)
+# Arquivos fonte e objetos
+SRC = $(SRC_DIR)/main.cpp $(SRC_DIR)/grafo.cpp
+OBJ = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRC))
+
+# Binário final
+EXEC = $(BUILD_DIR)/netdiscovery
+
+# Regra padrão
+all: $(EXEC)
+
+# Compilação dos objetos dentro da pasta build/
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+	mkdir -p $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-dot: $(BUILD)/main.o $(BUILD)/grafo.o
-	mkdir -p $(OUTPUT)
-	$(CXX) $(CXXFLAGS) $^ -o $(BUILD)/netdiscovery
-	./$(BUILD)/netdiscovery
+# Linkagem final
+$(EXEC): $(OBJ)
+	mkdir -p $(OUTPUT_DIR)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $(EXEC)
 
-run: dot
-	xdg-open $(OUTPUT)/grafo.png
+# Executa o programa
+run: all
+	./$(EXEC)
+
+# Remove objetos e binário
+clean:
+	rm -rf $(BUILD_DIR) $(OUTPUT_DIR)
+
