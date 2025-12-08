@@ -14,7 +14,6 @@
 Grafo::Grafo(int n) : n(n), adj(n), posicoes(n), posicoesAntigas(n), movimentoRealizado(false) {
     std::random_device rd;
     std::mt19937 gen(rd());
-    // Começa um pouco mais centralizado
     std::uniform_real_distribution<> dist(100.0, 400.0); 
 
     for(int i=0; i<n; ++i) {
@@ -74,19 +73,17 @@ void Grafo::garantirConexao() {
     }
 }
 
-// ==========================================================
 // MOBILIDADE COM FÍSICA (REPULSÃO E ATRAÇÃO)
-// ==========================================================
 void Grafo::aplicarMobilidade(double maxDeslocamento) {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dis(-maxDeslocamento * 0.5, maxDeslocamento * 0.5); // Movimento aleatório menor
+    std::uniform_real_distribution<> dis(-maxDeslocamento * 0.5, maxDeslocamento * 0.5); 
 
     // Parâmetros de Física
-    const double DISTANCIA_MINIMA = 90.0; // Se chegar mais perto que isso, empurra
-    const double FORCA_REPULSAO = 40.0;   // Força com que eles se empurram
-    const double CENTRO_MAPA = 250.0;     // Centro da área (500x500)
-    const double FATOR_RETORNO = 0.05;    // Força suave puxando de volta ao centro
+    const double DISTANCIA_MINIMA = 90.0; 
+    const double FORCA_REPULSAO = 40.0;   
+    const double CENTRO_MAPA = 250.0;     
+    const double FATOR_RETORNO = 0.05;    
     
     // Parâmetros de Conexão
     const double ALCANCE_MAXIMO = 140.0; 
@@ -202,14 +199,8 @@ void Grafo::salvarDot(const std::string& filename) const {
     out.imbue(std::locale::classic());
 
     out << "graph G {\n";
-    // outputorder=edgesfirst: Desenha linhas antes dos nós (evita riscar o nó)
-    // bgcolor="white": Garante fundo branco limpo
     out << "  graph [bb=\"0,0,500,500\", inputscale=72, splines=line, pad=\"0.2\", outputorder=edgesfirst, bgcolor=\"white\"];\n";
-    
-    // Configuração padrão dos nós (Fonte melhor, cores mais suaves)
     out << "  node [shape=circle, style=\"filled,setlinewidth(1.5)\", fillcolor=\"#E0F7FA\", color=\"#006064\", fontname=\"Helvetica-Bold\", fontsize=10, fixedsize=true, width=0.4];\n";
-    
-    // Configuração padrão das arestas
     out << "  edge [fontname=\"Helvetica\", fontsize=8, fontcolor=\"#555555\", color=\"#455A64\"];\n";
 
     // Arestas (Conexões)
@@ -218,8 +209,6 @@ void Grafo::salvarDot(const std::string& filename) const {
             int j = edge.first;
             int peso = edge.second;
             if (i < j) {
-                // len=... ajuda o neato a entender a distância ideal, mas pos="..." manda mais
-                // Adicionamos penwidth mais fino e cor cinza chumbo
                 out << "  " << i << " -- " << j << " [label=\"" << peso << "\", penwidth=0.8];\n";
             }
         }
@@ -231,11 +220,9 @@ void Grafo::salvarDot(const std::string& filename) const {
         out << "  " << i << " [pos=\"" << posicoes[i].x << "," << posicoes[i].y << "!\"];\n";
 
         if (movimentoRealizado) {
-            // Nó fantasma: Muito menor, cinza claro e transparente
             out << "  \"" << i << "_ghost\" [pos=\"" << posicoesAntigas[i].x << "," << posicoesAntigas[i].y 
                 << "!\", label=\"\", shape=circle, width=0.08, style=filled, fillcolor=\"#BDBDBD\", color=\"#9E9E9E\"];\n";
-            
-            // Linha do rastro: Pontilhada fina e cinza claro (menos agressivo que vermelho)
+        
             out << "  \"" << i << "_ghost\" -- " << i << " [style=dotted, color=\"#EF5350\", penwidth=0.8, arrowhead=none];\n";
         }
     }

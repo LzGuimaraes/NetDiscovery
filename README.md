@@ -1,203 +1,307 @@
-# NetDiscovery
+# 🌐 Network Discovery Simulator
 
-## Descrição
+Simulador de rede dinâmica com mobilidade inteligente, descoberta de topologia e roteamento adaptativo.
 
-NetDiscovery é um simulador de topologia de redes desenvolvido em C++ que permite visualizar e analisar a propagação de mensagens em redes de computadores. O projeto gera grafos aleatórios representando redes, calcula rotas ótimas entre nós usando o algoritmo de Dijkstra e visualiza a topologia através de grafos gerados automaticamente.
+## 📋 Descrição
 
-## Funcionalidades
+Este projeto simula uma rede de computadores móveis (MANETs - Mobile Ad-Hoc Networks) onde:
+- **Nós se movem** dinamicamente no espaço 2D
+- **Conexões são criadas/perdidas** baseadas na distância entre nós
+- **Rotas são recalculadas** automaticamente após cada movimento
+- **Visualização gráfica** mostra a evolução da rede em tempo real
 
-- **Geração de Topologia Aleatória**: Cria redes com densidade configurável e garante conectividade entre todos os nós
-- **Visualização Gráfica**: Exporta a topologia da rede em formato PNG através do Graphviz
-- **Simulação de Mensagens**: Calcula e exibe as rotas mais curtas entre um nó origem e todos os demais
-- **Matriz de Adjacência**: Mostra a representação matricial da rede
-- **Algoritmo de Dijkstra**: Implementa busca de caminho mais curto com pesos unitários
+### Características Principais
 
-## Estrutura do Projeto
+✨ **Física de Movimento Realista**
+- Movimento browniano (aleatório)
+- Repulsão entre nós (evita sobreposição)
+- Atração ao centro (mantém rede coesa)
 
-```
-NetDiscovery/
-├── include/
-│   └── grafo.hpp          # Definição da classe Grafo
-├── src/
-│   ├── main.cpp           # Programa principal
-│   └── grafo.cpp          # Implementação da classe Grafo
-├── build/                 # Arquivos objeto e executável (gerado)
-├── output/                # Arquivos de saída (grafo.dot e grafo.png)
-├── Makefile              # Script de compilação
-└── README.md             # Este arquivo
-```
+🔗 **Topologia Dinâmica**
+- Conexões baseadas em alcance de rádio (140 unidades)
+- Pesos das arestas proporcionais à distância
+- Reconexão automática após movimento
 
-## Dependências
+📊 **Algoritmos de Rede**
+- **Dijkstra**: Cálculo de menor caminho
+- **BFS**: Descoberta de topologia
+- **Tabelas de Roteamento**: Atualizadas a cada passo
 
-### Linux (Ubuntu/Debian)
+🎨 **Visualização com Graphviz**
+- Rastro de movimento (nó fantasma + linha pontilhada)
+- Cores suaves e design profissional
+- Histórico de passos salvos automaticamente
+
+---
+
+## 🛠️ Bibliotecas e Dependências
+
+### Bibliotecas C++ (STL - já incluídas no compilador)
+- `<vector>` - estruturas de dados dinâmicas
+- `<queue>` - fila de prioridade para Dijkstra
+- `<random>` - geração de números aleatórios
+- `<thread>` e `<chrono>` - delays entre passos
+- `<fstream>` - leitura/escrita de arquivos
+
+### Dependências Externas
+
+#### **Graphviz** (OBRIGATÓRIO)
+Ferramenta para gerar gráficos a partir de arquivos `.dot`
+
+**Site oficial:** https://graphviz.org/download/
+
+---
+
+## 📥 Instalação
+
+### 🐧 **Linux (Ubuntu/Debian)**
 
 ```bash
-# Compilador C++ com suporte a C++17
+# Instalar compilador C++ e Graphviz
 sudo apt update
-sudo apt install g++ make
+sudo apt install build-essential graphviz
 
-# Graphviz para visualização de grafos
-sudo apt install graphviz
+# Clonar/Baixar o projeto
+cd netdiscovery
 
-# Visualizador de imagens (opcional, para 'make run')
-sudo apt install xdg-utils
+# Compilar
+make
+
+# Executar
+make run
 ```
 
-### Linux (Fedora/RHEL)
+### 🍎 **macOS**
 
 ```bash
-sudo dnf install gcc-c++ make graphviz
-```
-
-### Linux (Arch)
-
-```bash
-sudo pacman -S gcc make graphviz
-```
-
-### macOS
-
-```bash
-# Instalar Homebrew (se ainda não tiver)
+# Instalar Homebrew (se não tiver)
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Instalar dependências
-brew install gcc make graphviz
-```
+brew install gcc graphviz
 
-### Windows
-
-**Opção 1: WSL (Recomendado)**
-1. Instale o WSL2 seguindo a [documentação oficial da Microsoft](https://docs.microsoft.com/windows/wsl/install)
-2. Dentro do WSL, siga as instruções para Linux (Ubuntu)
-
-**Opção 2: MinGW/MSYS2**
-1. Instale o [MSYS2](https://www.msys2.org/)
-2. No terminal MSYS2, execute:
-```bash
-pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-graphviz make
-```
-3. Adicione `C:\msys64\mingw64\bin` ao PATH do sistema
-
-**Opção 3: Visual Studio**
-1. Instale o Visual Studio com suporte a C++
-2. Instale o Graphviz separadamente do [site oficial](https://graphviz.org/download/)
-3. Adapte o Makefile ou compile manualmente
-
-## Compilação e Execução
-
-### Compilar e executar
-
-```bash
+# Compilar e executar
 make
+make run
 ```
 
-Este comando irá:
-1. Compilar os arquivos fonte
-2. Gerar o executável `build/netdiscovery`
-3. Executar o programa automaticamente
+### 🪟 **Windows**
 
-### Apenas compilar
+#### **Opção 1: WSL (Recomendado)**
+```powershell
+# Instalar WSL2 (PowerShell como Admin)
+wsl --install
 
+# Reiniciar e abrir Ubuntu WSL
+# Seguir instruções do Linux acima
+```
+
+#### **Opção 2: MinGW + Graphviz**
+
+1. **Instalar MinGW-w64:**
+   - Baixar de: https://www.mingw-w64.org/
+   - Adicionar `C:\mingw64\bin` ao PATH do Windows
+
+2. **Instalar Graphviz:**
+   - Baixar installer: https://graphviz.org/download/
+   - Adicionar `C:\Program Files\Graphviz\bin` ao PATH
+
+3. **Compilar:**
+```cmd
+mingw32-make
+build\netdiscovery.exe
+```
+
+#### **Opção 3: MSYS2 (Mais Simples)**
 ```bash
-make dot
+# Instalar MSYS2: https://www.msys2.org/
+# No terminal MSYS2:
+pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-graphviz
+make
+./build/netdiscovery
 ```
 
-### Executar e abrir a visualização
+---
+
+## 🚀 Como Usar
+
+### Execução Básica
 
 ```bash
 make run
 ```
 
-Abre automaticamente a imagem gerada (Linux com xdg-open)
+### Fluxo de Uso
 
-### Limpar arquivos de compilação
+1. **Defina o número de nós:**
+   ```
+   Digite o número de nós da rede: 8
+   ```
+
+2. **Estado inicial é gerado:**
+   - Matriz de adjacência impressa
+   - Grafo salvo em `output/grafo_inicial.png`
+
+3. **Escolha nó de origem para teste:**
+   ```
+   Digite o nó de origem para teste inicial: 0
+   ```
+
+4. **Simulação automática inicia:**
+   - A cada 10 segundos, os nós se movem
+   - Conexões são atualizadas
+   - Tabelas de roteamento são exibidas
+   - Imagens são salvas em `output/`
+
+5. **Parar a simulação:**
+   ```
+   Pressione Ctrl+C
+   ```
+
+### Visualizar Resultados
 
 ```bash
+# Abrir imagem principal
+xdg-open output/grafo.png  # Linux
+open output/grafo.png      # macOS
+start output/grafo.png     # Windows
+
+# Ver histórico
+ls output/grafo_passo_*.png
+```
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+netdiscovery/
+├── Makefile              # Automação de compilação
+├── README.md             # Este arquivo
+├── include/
+│   └── grafo.hpp         # Cabeçalho da classe Grafo
+├── src/
+│   ├── main.cpp          # Programa principal
+│   └── grafo.cpp         # Implementação do grafo
+├── build/                # Objetos compilados (gerado)
+│   └── netdiscovery      # Executável
+└── output/               # Resultados (gerado)
+    ├── grafo.dot         # Arquivo Graphviz
+    ├── grafo_inicial.png # Estado inicial
+    ├── grafo.png         # Estado atual
+    └── grafo_passo_N.png # Histórico de passos
+```
+
+---
+
+## ⚙️ Parâmetros Ajustáveis
+
+### No código `src/grafo.cpp`:
+
+```cpp
+// Física de Movimento (linha ~78)
+const double DISTANCIA_MINIMA = 90.0;  // Distância mínima entre nós
+const double FORCA_REPULSAO = 40.0;    // Força de repulsão
+const double ALCANCE_MAXIMO = 140.0;   // Alcance de rádio
+
+// Área de simulação
+const double MIN_MAP = 10.0;
+const double MAX_MAP = 490.0;
+```
+
+### No código `src/main.cpp`:
+
+```cpp
+// Densidade e pesos (linha 13)
+g.gerarTopologiaAleatoria(0.3, 20); // densidade=0.3, peso_max=20
+
+// Intervalo de movimento (linha 37)
+std::this_thread::sleep_for(std::chrono::seconds(10)); // 10 segundos
+```
+
+---
+
+## 🧹 Limpeza
+
+```bash
+# Remover arquivos compilados e resultados
 make clean
 ```
 
-## Uso do Programa
+---
 
-Ao executar o programa, você será solicitado a:
+## 🐛 Troubleshooting
 
-1. **Número de nós**: Digite quantos computadores/dispositivos a rede terá
-2. **Nó de origem**: Digite o número do nó (0 a n-1) que será a origem das mensagens
+### Erro: `neato: command not found`
+**Causa:** Graphviz não instalado ou não está no PATH  
+**Solução:**
+```bash
+# Verificar instalação
+neato -V
 
-### Exemplo de execução
-
-```
-Digite o número de nós da rede: 5
-
-📡 Matriz de Adjacência:
- 0  1  1  0  1 
- 1  0  1  1  0 
- 1  1  0  0  1 
- 0  1  0  0  1 
- 1  0  1  1  0 
-
-Digite o nó de origem para simular mensagens: 0
-
-💬 Mensagens enviadas a partir do nó 0:
-Rota 0 -> 1: 0->1
-Rota 0 -> 2: 0->2
-Rota 0 -> 3: 0->1->3
-Rota 0 -> 4: 0->4
-
-✅ Grafo salvo em 'output/grafo.png'
+# Se não encontrar, instalar Graphviz
+# Linux: sudo apt install graphviz
+# macOS: brew install graphviz
+# Windows: Adicionar ao PATH
 ```
 
-## 🧮 Como Funciona
+### Erro: `No such file or directory: output/`
+**Causa:** Pasta output não foi criada  
+**Solução:** O Makefile cria automaticamente, mas pode fazer manualmente:
+```bash
+mkdir -p build output
+```
 
-### Geração da Topologia
+### Imagens não abrem automaticamente
+**Solução:** Abrir manualmente com visualizador de imagens:
+```bash
+# Linux
+eog output/grafo.png
 
-O programa gera uma rede aleatória onde:
-- Cada par de nós tem uma probabilidade (densidade = 20% por padrão) de serem conectados
-- Um algoritmo de BFS garante que todos os nós estejam conectados
-- Se algum nó ficar isolado, ele é conectado automaticamente ao grafo principal
+# macOS
+open output/grafo.png
 
-### Algoritmo de Dijkstra
+# Windows
+explorer output\grafo.png
+```
 
-Para encontrar os caminhos mais curtos:
-- Utiliza uma fila de prioridade para explorar nós em ordem de distância
-- Considera peso unitário (1) para todas as conexões
-- Mantém um vetor de predecessores para reconstruir os caminhos
+### Compilação falha no Windows
+**Causa:** PATH não configurado corretamente  
+**Solução:** Use WSL ou verifique se MinGW/MSYS2 está no PATH do sistema
 
-### Visualização
+---
 
-- Exporta o grafo no formato DOT (Graphviz)
-- Converte automaticamente para PNG usando o comando `dot`
-- A imagem final mostra todos os nós e suas conexões
+## 📚 Conceitos Implementados
 
-## 🔍 Detalhes Técnicos
+### Algoritmos
+- **Dijkstra** - Menor caminho com complexidade O((V+E) log V)
+- **BFS** - Busca em largura para descoberta de topologia
+- **Union-Find implícito** - Garantia de conectividade do grafo
 
-- **Linguagem**: C++17
-- **Estrutura de dados**: Lista de adjacência
-- **Complexidade do Dijkstra**: O((V + E) log V)
-- **Gerador de números aleatórios**: `std::mt19937` (Mersenne Twister)
+### Estruturas de Dados
+- **Lista de adjacências** - Representação eficiente do grafo
+- **Priority Queue** - Heap para Dijkstra
+- **Vectors dinâmicos** - Coordenadas e estado dos nós
 
-## 📝 Possíveis Melhorias
+### Física
+- **Movimento Browniano** - Simulação de mobilidade aleatória
+- **Forças de repulsão** - Modelo de partículas carregadas
+- **Atração ao centro** - Força centrípeta para manter coesão
 
-- Adicionar pesos variáveis nas arestas
-- Implementar outros algoritmos de roteamento (Bellman-Ford, Floyd-Warshall)
-- Criar interface gráfica interativa
-- Simular falhas de nós/enlaces
-- Adicionar métricas de desempenho da rede
-- Suportar importação de topologias personalizadas
+---
 
-## 🐛 Solução de Problemas
+## 📖 Referências
 
-**Erro: "dot: command not found"**
-- Instale o Graphviz conforme as instruções de dependências
+- [Graphviz Documentation](https://graphviz.org/documentation/)
+- [Dijkstra's Algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
+- [Mobile Ad Hoc Networks (MANETs)](https://en.wikipedia.org/wiki/Mobile_ad_hoc_network)
 
-**Erro de compilação C++17**
-- Verifique se seu compilador suporta C++17
-- No GCC: versão 7.0 ou superior
+---
 
-**Imagem não abre automaticamente**
-- Execute manualmente: `xdg-open output/grafo.png` (Linux)
-- Ou abra o arquivo `output/grafo.png` diretamente
+## 👨‍💻 Autor
 
-## 📄 Licença
+Luiz Fernando dos Santos Guimarães
 
-Projeto educacional livre para uso e modificação.
+Projeto desenvolvido para estudo de **Redes de Computadores** e **Algoritmos de Grafos**.
+
+**Licença:** MIT (uso livre para fins educacionais)
